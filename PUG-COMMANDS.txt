@@ -1,0 +1,126 @@
+﻿No closing tags
+
+span.text --> <span class="text"></span>
+ .block --> <div class="block"></div>
+_________________________________________________________
+To pass content inside tags
+
+.block Text inside the block
+
+.block
+ | Text inside the block
+
+.block.
+ Text inside the block
+
+Need white space or tab!!
+_________________________________________________________
+Block insidge another block
+
+.block
+ .inner-block Text inside the block     --> <div class="block">
+			     		<div class="inner-block">
+						Inside block
+					</div>
+				</div>
+
+.sibling-block
+ | Text of next block  --> <div class="sibling-block">
+		      	Next block
+	 	      </div>
+
+To show a block insidge another block you need to put that block to a new line and tab or press space bar. Use ether tab key or space bar key!
+___________________________
+Attributes
+
+imp(src="", alt="").img-class
+
+If you have lots of attributes you can put them in column (with enter key).
+______________________________
+Comments
+
+//- Comment  --> This comment won't be transferred to HTML file.
+
+// Comment  --> This comment will be transferred to HTML file.
+______________________________
+
+To show classes, ID for tags:
+
+h2.heading-1 Title
+p#text Text
+div.class-1.class-2#box Text Inside
+div(class="class-1 class-2" id="the-box")
+
+_________________________________________________________
+To place large chunks of text
+
+p LARGE CHUNK OF TEXT  --> from <p> just press tab or space bar and place a large text
+
+p
+ | LARGE CHUNK OF TEXT     --> press enter key+tab(space bar) +place vertical line +paste a large text.
+
+p.
+ LARGE CHUNK OF TEXT     --> press enter key+tab(space bar) +paste a large text. No vertical line needed
+_________________________________________________________
+HTML attributes
+
+div (
+       class="text" 
+       id="box" 
+        data-value="5"
+         ).
+        Text
+
+_________________________________________________________
+Variable
+
+-var name="Andrey"
+
+h1 Hello #{name}!   --> <h1>Hello Andrey</h1>
+
+-var active="active-item"
+
+div(class="box box--wide "+  active)  --> <div class="box box--wide active-item"></div>
+_________________________________________________________
+INCLUDE; file connection
+
+include modules/header.pug --> INCLUDE + "file location". No .pug extension necessary.
+_________________________________________________________
+EXTENDS
+
+extends layouts/master-page.pug
+
+1) To put our data to main.pug file we need to put "block content" words to the place in master-page.pug (this file contains our template/main HTML structure)  file where we want to place our data.
+ 
+
+In the <head>, for <title>, we need to place a variable [title #{title}], and place [block variables] on the first line, in master-page.pug file. Then in index.pug, we place:
+
+block content
+	-var title="Main page"
+
+index.pug and about.pug inherits the base HTML structure from master file (master-page.pug) and then can be worked on. All changes are reflected in index.html and about.html respectively.
+_________________________________________________________
+block prepend Content
+	div SOME TEXT   --> prepends some text to the text that was inherited from the master file (master-page.pug in this case)
+
+block append Content
+	div SOME TEXT   --> appends some text to the text that was inherited from the master file (master-page.pug in this case)
+_________________________________________________________
+Mixins
+
+1) Create mixins.pug file
+2) mixin : keyword/command
+
+mixin card(img, title, price) 
+	.card
+	      img(src="img")
+	      h2 #{title}
+	      .price #{price}$
+
+3) To call that card, you need to include mixins.pug file (include mixins/mixins.pug), then:
+
++card("img/nokia.jpg","Nokia",35)
++card("img/iphone.jpg","iPhone",75)
++card("img/htc.jpg","HTC",55)	
+_________________________________________________________
+
