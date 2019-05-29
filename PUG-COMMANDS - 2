@@ -1,0 +1,198 @@
+1 -- Переменные в pug
+
+var title = ""Это прекрасный текст"; Строки
+var city = "Moscow";
+var typeOfCity = "<strong>мегаполис!</strong>";
+Использование переменной
+
+h1= title                                           
+p Я живу в городе #{city} 
+
+p По населению, это #{typeOfCity}                    
+<p>По населению, это &lt;strong&gt;мегаполис!&lt;/storng&gt;</p>
+
+p По населению, это !{typeOfCity}                    
+<p>По населению, это <strong>мегаполис!</strong></p>
+
+
+2 -- Теги внутри текста
+
+p 
+  | if i dont write the paragraph with tag
+   interpolation, tags like
+  strong strong
+  | and 
+  em em
+  | might produce unexpected  results.
+  
+  <p>if i dont write the paragraph with tag interpolation, tags like<strong>strong</strong>and<em>em</em>might produce unexpected  results.</p>
+
+p 
+  | if i dont write the paragraph with tag
+   interpolation, tags like #[strong(id="value") respected] and 
+  #[em somthing emotional] might produce unexpected  results.
+  
+  <p>if i dont write the paragraph with tag interpolation, 
+tags like<strong id="value">respected</strong>and<em>somthing emotional</em>might produce unexpected  results.</p> 
+
+3 -- Обход массивов
+  
+  var navigation = ['Главная', 'Услуги', 'О компании', 'Портфолио', 'Контакты'];
+  
+  nav.nav
+      ul
+        each item, index in navigation
+          li
+            a(href="#")= index+1 +' - ' +item
+        else
+	  li В меню нет элементов     
+OUTPUT:       
+           <nav>
+                <ul>
+                        <li><a href="#">1 - Главная</a></li>
+                        <li><a href="#">2 - Услуги</a></li>
+                        <li><a href="#">3- О компании</a></li>
+                        <li><a href="#">4 - Портфолио</a></li>
+                        <li><a href="#">5 - Контакты</a></li>
+                </ul>
+        </nav>
+  
+  4 -- Цикл while
+  
+- var n = 0;
+
+  ul
+    while n < 4
+      li= n++
+  
+OUTPUT:       
+ 
+ <ul>
+  <li>0</li>
+  <li>1</li>
+  <li>2</li>
+  <li>3</li>
+ </ul>
+ 
+ 
+ 5 -- Массивы и объекты. Навигация часть 2
+ 
+ - 
+    var navigation = [
+ 	          'Главная', 
+                    'Услуги', 
+                    'О компании', 
+                    'Портфолио', 
+                    'Контакты'
+          ];
+                    
+    nav.nav
+      ul
+        each item in navigation
+          li
+            a(href="#")=item
+
+----------------------------------------------------------------
+            
+ - 
+    var navigation = [
+        {name: 'Главная', link: 'index.html'},
+        {name: 'Услуги', link: 'services.html'},
+        {name: 'О компании', link: 'about.html'},
+        {name: 'Портфолио', link: 'portfolio.html'},
+        {name: 'Контакты', link: 'contacts.html'}
+        ];
+        
+    nav.nav
+      ul
+        each item in navigation
+          li
+            a(href= item.link)=item.name
+
+OUTPUT:
+
+<nav>
+                <ul>
+                        <li><a href="index.html">Главная</a></li>
+                        <li class="new"><a href="services.html">Услуги</a></li>
+                        <li><a href="about.html">О компании</a></li>
+                        <li><a href="portfolio.html">Портфолио</a></li>
+                        <li><a href="contacts.html">Контакты</a></li>
+                </ul>
+        </nav>            
+            
+6 -- Опциональный параметр. Навигация часть 3
+
+- 
+    var navigation = [
+        {name: 'Главная', link: 'index.html'},
+        {name: 'Услуги', link: 'services.html', cssclass: 'new'},
+        {name: 'О компании', link: 'about.html'},
+        {name: 'Портфолио', link: 'portfolio.html'},
+        {name: 'Контакты', link: 'contacts.html'}
+        ];
+        
+    nav.nav
+      ul
+        each item in navigation
+          if item.cssClass
+            li(class= item.cssClass)
+              a(href= item.link)=item.name
+          else
+              li
+                 a(href= item.link)=item.name
+
+------------------------------
+OUTPUT:
+
+<nav>
+                <ul>
+                        <li><a href="index.html">Главная</a></li>
+                        <li class="new"><a href="services.html">Услуги</a></li>
+                         <li><a href="about.html">О компании</a></li>
+                        <li><a href="portfolio.html">Портфолио</a></li>
+                        <li><a href="contacts.html">Контакты</a></li>
+                </ul>
+        </nav>  
+  
+ 7 -- Миксин для навигации. Навигация часть 4
+ 
+Include nav-mixin.pug  -- Включаешь файл с миксином
+ - 
+    var navigation = [
+        {name: 'Главная', link: 'index.html'},
+        {name: 'Услуги', link: 'services.html', cssclass: 'new'},
+        {name: 'О компании', link: 'about.html'},
+        {name: 'Портфолио', link: 'portfolio.html'},
+        {name: 'Контакты', link: 'contacts.html'}
+        ];
+
++navigation(navigation);      Вызываешь миксин
+
+nav.nav
+      ul
+        each item in navigation
+          if item.cssClass
+            li(class= item.cssClass)                           <--  Весь этот кусок кода создадим отдельный миксин и можем его удалить
+              a(href= item.link)=item.name
+          else
+              li
+                 a(href= item.link)=item.name                       
+Назовем файл “nav-mixin.pug“ в папке mixin
+                                                                     <--Для всего этого куска кода создадим отдельный миксин
+
+С помощью команды  include nav-mixin.pug   подключим наш mixin. И где мы хотим его вызвать + (название миксина) +navigation(navigation)
+
+
+In nav-mixin.pug file:
+                                       mixin navigation(navigation)       
+                                          nav.nav
+                                              ul
+                                                each item in navigation
+                                                  if item.cssClass
+                                                    li(class= item.cssClass)                          
+                                                     a(href= item.link)=item.name
+                                                    else
+                                                      li
+                                                         a(href= item.link)=item.name      
+
